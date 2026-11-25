@@ -29,6 +29,6 @@ python3 fast_generate.py Presentation_Methode_FAST.pptx
 Expected output: `FAST_Presentation_Methode_FAST.pptx`.
 
 ## Current status
-The generator now places one neutral `LOGO — À INSÉRER` placeholder on the title slide. The actual `logo.png` file is deliberately deferred until a later update. The generator preserves the source slide order and applies white backgrounds; the generated PowerPoint still needs to be created and visually checked before it is committed.
+The generator now places one neutral `LOGO — À INSÉRER` placeholder on the title slide. The actual `logo.png` file is deliberately deferred until a later update. The generator preserves the source slide order, dimensions, backgrounds, and existing content. It also corrects title-slide contrast and restores readable text contrast on the summary slide (slide 11). The generated PowerPoint has been built, validated as a 12-slide 16:9 deck, and visually checked.
 
 Do not fabricate or imitate an official logo. Preserve the French content, original slide order, core FAST-method material, 16:9 format, and white-background design. Avoid covering existing titles, diagrams, or content.
