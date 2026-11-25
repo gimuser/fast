@@ -92,13 +92,7 @@ def main():
 
     prs = Presentation(str(source))
 
-    # Keep the existing widescreen layout and slide sequence.
-    # White backgrounds are applied consistently without changing slide content.
-    for slide in prs.slides:
-        bg = slide.background.fill
-        bg.solid()
-        bg.fore_color.rgb = WHITE
-
+    # Preserve the source deck: slide order, dimensions, backgrounds, and existing content.
     if prs.slides:
         slide = prs.slides[0]
         add_logo_placeholder(slide)
@@ -109,6 +103,7 @@ def main():
     print(f"[OK] Created: {OUT}")
     print(f"[INFO] Slides preserved: {len(prs.slides)}")
     print("[INFO] One neutral logo placeholder was added to the title slide.")
+    print("[INFO] Source backgrounds and existing slide content were preserved.")
     print("[INFO] The real logo asset is intentionally deferred.")
 
 
