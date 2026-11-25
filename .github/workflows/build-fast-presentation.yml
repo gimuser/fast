@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -37,6 +37,17 @@ jobs:
           for i, slide in enumerate(p.slides, 1):
               print(f"Slide {i}: {len(slide.shapes)} shapes")
           PY
+      - name: Commit generated PowerPoint to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add FAST_Presentation_Methode_FAST.pptx
+          if git diff --cached --quiet; then
+            echo "No presentation changes to commit."
+          else
+            git commit -m "Add generated FAST presentation"
+            git push
+          fi
       - name: Upload generated deck
         uses: actions/upload-artifact@v4
         with:
