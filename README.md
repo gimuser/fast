@@ -5,8 +5,8 @@ Repository for the French presentation on the FAST functional-analysis method.
 ## Files
 - `Presentation_Methode_FAST.pptx`: source presentation committed at the repository root.
 - `fast_generate.py`: reproducible Python editing/generation script.
-- `FAST_Presentation_Methode_FAST.pptx`: expected generated output.
-- `logo.png`: single user-requested logo asset; verify its presence on `main` before using it.
+- `FAST_Presentation_Methode_FAST.pptx`: generated presentation output.
+- `logo.png`: real logo asset reserved for a later update; it is intentionally not inserted yet.
 
 ## Presentation context
 - University: Université Sultan Moulay Slimane (USMS)
@@ -28,7 +28,7 @@ python3 fast_generate.py Presentation_Methode_FAST.pptx
 
 Expected output: `FAST_Presentation_Methode_FAST.pptx`.
 
-## Current status and next action
-The source presentation `Presentation_Methode_FAST.pptx` is committed to `main`. The next requested edit is to integrate exactly one genuine image named `logo.png` into the presentation, preferably on the title slide, once that asset is confirmed present in the repository. Update `fast_generate.py`, regenerate and visually inspect the final deck, then commit the generator and generated PPTX to `main`.
+## Current status
+The generator now places one neutral `LOGO — À INSÉRER` placeholder on the title slide. The actual `logo.png` file is deliberately deferred until a later update. The generator preserves the source slide order and applies white backgrounds; the generated PowerPoint still needs to be created and visually checked before it is committed.
 
-Do not invent or redraw a logo. If `logo.png` is not present, ask the user to push it before proceeding. Preserve the French content, slide order, core FAST-method material, 16:9 format, and white backgrounds; avoid unrelated redesigns.
+Do not fabricate or imitate an official logo. Preserve the French content, original slide order, core FAST-method material, 16:9 format, and white-background design. Avoid covering existing titles, diagrams, or content.
