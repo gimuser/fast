@@ -6,12 +6,8 @@ Usage:
   python3 -m pip install python-pptx
   python3 fast_generate.py Presentation_Methode_FAST.pptx
 
-Optional official logo files:
-  assets/usms_logo.png
-  assets/fsabm_logo.png
-
-If the official logo files are absent, the script uses editable institutional
-text labels instead of inventing or misrepresenting official logos.
+The title slide receives one clearly marked logo placeholder. The real logo
+asset is intentionally not used yet; it can replace the placeholder later.
 """
 from pathlib import Path
 import sys
@@ -28,8 +24,11 @@ except ImportError:
 WHITE = RGBColor(255, 255, 255)
 NAVY = RGBColor(22, 54, 92)
 GREY = RGBColor(90, 100, 112)
+PALE_BLUE = RGBColor(244, 248, 252)
+BORDER_BLUE = RGBColor(151, 174, 199)
 FIELD = "Master Data Science et Sécurité des Systèmes d’Information"
 OUT = "FAST_Presentation_Methode_FAST.pptx"
+
 
 def add_label(slide, text, x, y, w, h, size=11, color=NAVY, bold=True):
     box = slide.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h))
@@ -47,11 +46,42 @@ def add_label(slide, text, x, y, w, h, size=11, color=NAVY, bold=True):
     run.font.color.rgb = color
     return box
 
-def add_logo_or_label(slide, path, label, x, y, w, h):
-    if path.exists():
-        slide.shapes.add_picture(str(path), Inches(x), Inches(y), width=Inches(w), height=Inches(h))
-    else:
-        add_label(slide, label, x, y, w, h, size=10, color=NAVY, bold=True)
+
+def add_logo_placeholder(slide):
+    """Add one neutral placeholder, not an imitation of an official logo."""
+    shape = slide.shapes.add_shape(
+        MSO_SHAPE.ROUNDED_RECTANGLE,
+        Inches(0.38), Inches(0.14), Inches(1.38), Inches(0.68)
+    )
+    shape.fill.solid()
+    shape.fill.fore_color.rgb = PALE_BLUE
+    shape.line.color.rgb = BORDER_BLUE
+    shape.line.width = Pt(1.1)
+
+    tf = shape.text_frame
+    tf.clear()
+    tf.word_wrap = True
+    tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+
+    p = tf.paragraphs[0]
+    p.alignment = PP_ALIGN.CENTER
+    r = p.add_run()
+    r.text = "LOGO"
+    r.font.name = "Aptos Display"
+    r.font.size = Pt(15)
+    r.font.bold = True
+    r.font.color.rgb = NAVY
+
+    p2 = tf.add_paragraph()
+    p2.alignment = PP_ALIGN.CENTER
+    p2.space_before = Pt(0)
+    r2 = p2.add_run()
+    r2.text = "À INSÉRER"
+    r2.font.name = "Aptos"
+    r2.font.size = Pt(6.5)
+    r2.font.color.rgb = GREY
+    return shape
+
 
 def main():
     if len(sys.argv) < 2:
@@ -62,7 +92,8 @@ def main():
 
     prs = Presentation(str(source))
 
-    # White background on every slide; retain all existing shapes and slide order.
+    # Keep the existing widescreen layout and slide sequence.
+    # White backgrounds are applied consistently without changing slide content.
     for slide in prs.slides:
         bg = slide.background.fill
         bg.solid()
@@ -70,22 +101,16 @@ def main():
 
     if prs.slides:
         slide = prs.slides[0]
-        # Add a compact institutional heading without reordering or deleting content.
-        # Positioning is intentionally near the top edge; adjust if the original title
-        # occupies this exact area.
-        add_logo_or_label(slide, Path("assets/usms_logo.png"),
-                          "UNIVERSITÉ SULTAN MOULAY SLIMANE", 0.35, 0.12, 2.05, 0.62)
-        add_logo_or_label(slide, Path("assets/fsabm_logo.png"),
-                          "FACULTÉ DES SCIENCES APPLIQUÉES • BÉNI MELLAL",
-                          9.05, 0.12, 3.55, 0.62)
-        add_label(slide, FIELD, 2.35, 0.20, 6.55, 0.42, size=10, color=GREY, bold=False)
+        add_logo_placeholder(slide)
+        add_label(slide, FIELD, 2.05, 0.20, 7.45, 0.42,
+                  size=10, color=GREY, bold=False)
 
     prs.save(OUT)
     print(f"[OK] Created: {OUT}")
     print(f"[INFO] Slides preserved: {len(prs.slides)}")
-    if not Path("assets/usms_logo.png").exists() or not Path("assets/fsabm_logo.png").exists():
-        print("[NOTICE] Official logo assets were not found. Editable text labels were used.")
-        print("Add genuine logo files at assets/usms_logo.png and assets/fsabm_logo.png, then rerun.")
+    print("[INFO] One neutral logo placeholder was added to the title slide.")
+    print("[INFO] The real logo asset is intentionally deferred.")
+
 
 if __name__ == "__main__":
     main()
